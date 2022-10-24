@@ -38,7 +38,7 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
   });
 
 $app->get('[/]', function (Request $request, Response $response) {    
-    $response->getBody()->write("Voy a colapsar :)");
+    $response->getBody()->write('<a href="https://www.youtube.com/watch?v=kKERx6iP9eE"> Ver Video </a>');
     return $response;
 
 });
