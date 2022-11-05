@@ -73,4 +73,26 @@ class UsuarioController extends Usuario implements IApiUsable
         return $response
           ->withHeader('Content-Type', 'application/json');
     }
+
+  public function Login($request, $response)
+  {
+
+    $parametros = $request->getParsedBody();
+
+    $nombre = $parametros['usuario'];
+    $clave = $parametros['clave'];
+
+    $respuesta = Usuario::verificarDatos($nombre, $clave);
+    if($respuesta === 1){
+      $response->getBody()->write("Sesión iniciada correctamente");
+    }else if($respuesta === 2){
+      $response->getBody()->write("Datos Invalidos");
+    }else{
+      $response->getBody()->write("El usuario no existe");
+    }
+
+
+    return $response
+          ->withHeader('Content-Type', 'application/json');
+  }
 }

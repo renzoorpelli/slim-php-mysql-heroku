@@ -37,6 +37,29 @@ class Usuario
         return $consulta->fetchObject('Usuario');
     }
 
+    public static function verificarDatos($usuario, $clave) : int
+    {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, usuario, clave FROM usuarios WHERE usuario = :usuario");
+        $consulta->bindValue(':usuario', $usuario, PDO::PARAM_STR);
+        $consulta->execute();
+        $retorno = 0;
+        $userDataBase = $consulta->fetchObject('Usuario');
+
+        var_dump($userDataBase);
+
+        if($userDataBase->usuario == $usuario){
+            if(password_verify($clave,$userDataBase->clave) ||  $userDataBase->clave == $clave){
+                $retorno = 1;
+            }else{
+                $retorno = 2;
+            }
+        }
+        return $retorno;
+
+    }
+
+
     public  static function modificarUsuario($nombre, $clave, $id)
     {
         $objAccesoDato = AccesoDatos::obtenerInstancia();

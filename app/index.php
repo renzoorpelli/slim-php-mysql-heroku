@@ -17,6 +17,8 @@ require_once './db/AccesoDatos.php';
 
 require_once './controllers/UsuarioController.php';
 
+require_once './middlewares/logInMiddleware.php';
+
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
@@ -37,6 +39,7 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
     $group->post('[/]', \UsuarioController::class . ':CargarUno');
     $group->put('[/]', \UsuarioController::class . ':ModificarUno');
     $group->delete('/{usuarioId}', \UsuarioController::class . ':BorrarUno');
+    $group->post('/login', \UsuarioController::class . ':Login')->add(new VerificadorMiddleWare());
   });
 
 $app->get('[/]', function (Request $request, Response $response) {    
@@ -44,5 +47,9 @@ $app->get('[/]', function (Request $request, Response $response) {
     return $response;
 
 });
+
+
+
+
 
 $app->run();
