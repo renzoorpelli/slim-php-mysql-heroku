@@ -18,6 +18,7 @@ require_once './db/AccesoDatos.php';
 require_once './controllers/UsuarioController.php';
 
 require_once './middlewares/logInMiddleware.php';
+require_once './middlewares/requestTimeMiddleware.php';
 
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -39,14 +40,19 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
     $group->post('[/]', \UsuarioController::class . ':CargarUno');
     $group->put('[/]', \UsuarioController::class . ':ModificarUno');
     $group->delete('/{usuarioId}', \UsuarioController::class . ':BorrarUno');
-    $group->post('/login', \UsuarioController::class . ':Login')->add(new VerificadorMiddleWare());
-  });
+    $group->post('/login', \UsuarioController::class . ':loginClaim')->add(new VerificadorMiddleWare());
+}
+);
 
 $app->get('[/]', function (Request $request, Response $response) {    
     $response->getBody()->write('<a href="https://www.youtube.com/watch?v=kKERx6iP9eE"> Ver Video </a>');
+
+    sleep(4);
+
+    
     return $response;
 
-});
+})->add(new requestTimeMiddleware());;
 
 
 

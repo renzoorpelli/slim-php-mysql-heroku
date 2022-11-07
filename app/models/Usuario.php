@@ -6,8 +6,11 @@ class Usuario
     public $usuario;
     public $clave;
 
-    public function crearUsuario()
+    public function crearUsuario($claims) : int
     {
+        if($claims !== "admin"){
+            return 0;
+        }
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave) VALUES (:usuario, :clave)");
         $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
@@ -45,9 +48,6 @@ class Usuario
         $consulta->execute();
         $retorno = 0;
         $userDataBase = $consulta->fetchObject('Usuario');
-
-        var_dump($userDataBase);
-
         if($userDataBase->usuario == $usuario){
             if(password_verify($clave,$userDataBase->clave) ||  $userDataBase->clave == $clave){
                 $retorno = 1;

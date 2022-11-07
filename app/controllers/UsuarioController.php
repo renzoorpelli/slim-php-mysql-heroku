@@ -81,10 +81,10 @@ class UsuarioController extends Usuario implements IApiUsable
 
     $nombre = $parametros['usuario'];
     $clave = $parametros['clave'];
-
     $respuesta = Usuario::verificarDatos($nombre, $clave);
     if($respuesta === 1){
-      $response->getBody()->write("Sesión iniciada correctamente");
+
+      $response->getBody()->write(json_encode(array("obj_json" => "usuario: ".$nombre." clave: ".$clave)));
     }else if($respuesta === 2){
       $response->getBody()->write("Datos Invalidos");
     }else{
@@ -94,5 +94,29 @@ class UsuarioController extends Usuario implements IApiUsable
 
     return $response
           ->withHeader('Content-Type', 'application/json');
+  }
+
+
+  public function loginClaim($request, $response){
+
+    $parametros = $request->getParsedBody();
+
+    $nombre = $parametros['usuario'];
+    $clave = $parametros['clave'];
+    $respuesta = Usuario::verificarDatos($nombre, $clave);
+    if($respuesta === 1){
+
+      $response->getBody()->write(json_encode(array("obj_json" => "usuario: ".$nombre." clave: ".$clave)));
+    }else if($respuesta === 2){
+      $response->getBody()->write("Datos Invalidos");
+    }else{
+      $response->getBody()->write("El usuario no existe");
+    }
+
+
+    return $response
+          ->withHeader('Content-Type', 'application/json');
+  
+
   }
 }

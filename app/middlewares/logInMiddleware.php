@@ -10,6 +10,7 @@ require_once './models/Usuario.php';
 
 class VerificadorMiddleWare
 {
+    private $suggestedClaims = array("admin", "super_admin");
    
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
@@ -17,9 +18,9 @@ class VerificadorMiddleWare
 
         $parametros = $request->getParsedBody();
 
-        if(isset($parametros["clave"]) && isset($parametros["usuario"]))
+        if(isset($parametros["clave"]) && isset($parametros["usuario"]) && isset($parametros["claim"]))
         {
-            if($parametros["clave"] != "" && $parametros["usuario"] != ""){
+            if($parametros["clave"] != "" && $parametros["usuario"] != "" && $parametros["claim"] != ""){
 
                 $reponse = $handler->handle($request); // llama al controllador
             }else{
