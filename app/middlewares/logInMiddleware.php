@@ -18,9 +18,9 @@ class VerificadorMiddleWare
 
         $parametros = $request->getParsedBody();
 
-        if(isset($parametros["clave"]) && isset($parametros["usuario"]) && isset($parametros["claim"]))
+        if(isset($parametros["clave"]) && isset($parametros["usuario"]))
         {
-            if($parametros["clave"] != "" && $parametros["usuario"] != "" && $parametros["claim"] != ""){
+            if($parametros["clave"] != "" && $parametros["usuario"] != ""){
 
                 $reponse = $handler->handle($request); // llama al controllador
             }else{

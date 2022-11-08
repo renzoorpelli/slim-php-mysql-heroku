@@ -19,6 +19,7 @@ require_once './controllers/UsuarioController.php';
 
 require_once './middlewares/logInMiddleware.php';
 require_once './middlewares/requestTimeMiddleware.php';
+require_once './middlewares/jwtChecker.php';
 
 // Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -40,9 +41,8 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
     $group->post('[/]', \UsuarioController::class . ':CargarUno');
     $group->put('[/]', \UsuarioController::class . ':ModificarUno');
     $group->delete('/{usuarioId}', \UsuarioController::class . ':BorrarUno');
-    $group->post('/login', \UsuarioController::class . ':loginClaim')->add(new VerificadorMiddleWare());
-}
-);
+    $group->post('/login', \UsuarioController::class . ':Login')->add(new VerificadorMiddleWare());
+})->add(new jwtChecker()); // valido que tenga un jwt en la cabecera
 
 $app->get('[/]', function (Request $request, Response $response) {    
     $response->getBody()->write('<a href="https://www.youtube.com/watch?v=kKERx6iP9eE"> Ver Video </a>');
@@ -53,6 +53,15 @@ $app->get('[/]', function (Request $request, Response $response) {
     return $response;
 
 })->add(new requestTimeMiddleware());;
+
+
+$app->group('/jwt', function (RouteCollectorProxy $group) {
+
+  $group->post('/login', \UsuarioController::class . ':Login')->add(new VerificadorMiddleWare());
+
+
+});
+
 
 
 

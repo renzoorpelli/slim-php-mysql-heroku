@@ -48,11 +48,14 @@ class Usuario
         $consulta->execute();
         $retorno = 0;
         $userDataBase = $consulta->fetchObject('Usuario');
-        if($userDataBase->usuario == $usuario){
-            if(password_verify($clave,$userDataBase->clave) ||  $userDataBase->clave == $clave){
-                $retorno = 1;
-            }else{
-                $retorno = 2;
+
+        if($userDataBase != null){
+            if($userDataBase->usuario == $usuario){
+                if(password_verify($clave,$userDataBase->clave) ||  $userDataBase->clave == $clave){
+                    $retorno = 1;
+                }else{
+                    $retorno = 2;
+                }
             }
         }
         return $retorno;
